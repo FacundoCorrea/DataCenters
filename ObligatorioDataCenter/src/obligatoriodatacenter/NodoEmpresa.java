@@ -37,4 +37,7 @@ public class NodoEmpresa {
         this.setDer(pDer);
         this.setIzq(pIzq);
     }
+    
+    public NodoEmpresa()
+    {}
 }

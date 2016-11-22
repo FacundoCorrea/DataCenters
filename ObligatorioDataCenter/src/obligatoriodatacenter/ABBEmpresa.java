@@ -1,70 +1,66 @@
 
 package obligatoriodatacenter;
 
+import obligatoriodatacenter.Retorno.Resultado;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class ABBEmpresa {
     NodoEmpresa raiz;
+    Pattern pattern = Pattern.compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
     
-    public void insertar ()
-    {
-        NodoEmpresa nuevo = new NodoEmpresa();
-        if (raiz == null)
-        {
+
+    public Retorno insertar(Empresa e){
+        Retorno r = new Retorno(Resultado.OK);
+        Matcher mather = pattern.matcher(e.getEmail_Contacto());
+        
+        if (mather.find() == true) {
+        if (esVacio()) {
+            NodoEmpresa nuevo = new NodoEmpresa();
+            nuevo.empresa = e;
+            nuevo.der = new ABBEmpresa();
+            nuevo.izq= new ABBEmpresa();
             raiz = nuevo;
-        }else{
-            nodoABB aux = raiz;
-            nodoABB ant = raiz;
-            while (aux != null)
-            {
-                ant = aux;
-                if(aux.dato < valor){
-                    aux = aux.der;
-                }else{
-                    aux = aux.izq;
-                }
-            }
-                if(ant.dato<valor){
-                    ant.der=nuevo;
-                }else{
-                    aux.izq=nuevo;
-                }
-            }
-     }
-    
-            
-        
-    public void imprimirInOrden(nodoABB a)
-    {
-     if(a!= null){
-     imprimirInOrden(a.izq);
-         System.out.println(a.dato);
-     imprimirInOrden(a.der);
-     }   
-    }
-    
-    public void imprimirPreOrden(nodoABB a)
-    {
-        if(a!=null)
-        {
-            System.out.println(a.dato);
-            imprimirPreOrden(a.izq);
-            imprimirPreOrden(a.der);
-            
         }
-    }
-    
-    public void eliminar(int valor)
-    {
+        else {
+            if (e.getNombre().compareTo(raiz.empresa.getNombre()) == 0)
+            {
+                r = new Retorno(Resultado.ERROR_2);
+            }
+            if (e.getNombre().compareTo(raiz.empresa.getNombre()) > 0) {
+                raiz.der.insertar(e);
+            }
+            if (e.getNombre().compareTo(raiz.empresa.getNombre()) < 0){
+                raiz.izq.insertar(e);
+            }
+        }
+        }
+        else
+        {
+           r = new Retorno(Resultado.ERROR_1) ;
+        }
         
+        return r;
     }
-    public int cantNodos() {
-        if(raiz == null)
-        return 0;
-
-        ABB hIzq = new ABB();
-        hIzq.raiz = this.raiz.izq;
-
-        ABB hDer = new ABB();
-        hDer.raiz = this.raiz.der;
-        return 1+hIzq.cantNodos()+hDer.cantNodos();
+    public Empresa buscarEmpresa(String nombre){
+        Empresa buscada = null;
+        if (!esVacio()) {
+            if (nombre.equals(raiz.empresa.getNombre())) {
+            return this.raiz.empresa;
+            }
+            else {
+                if (nombre.compareTo(raiz.empresa.getNombre()) < 0) {
+                    buscada = raiz.izq.buscarEmpresa(nombre);
+                }
+                else {
+                    buscada = raiz.der.buscarEmpresa(nombre);
+                }
+            }
+        }
+        return buscada;
     }
+    public boolean esVacio(){
+        return this.raiz == null;
+    }
+  
 }
