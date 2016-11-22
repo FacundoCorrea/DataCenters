@@ -122,8 +122,26 @@ public class Sistema implements ISistema {
 
 	@Override
 	public Retorno eliminarPunto(Double coordX, Double coordY) {
-		// TODO Auto-generated method stub
-		return new Retorno(Resultado.NO_IMPLEMENTADA);
+        Retorno r = new Retorno(Resultado.ERROR_1);
+        boolean estado = true;
+        int i;
+        for(i=0; i <= (Puntos.length -1) ;i++)
+        {
+            if(Puntos[i] != null)
+            {
+             if(Puntos[i].getCoordX() == coordX && Puntos[i].getCoordY()== coordY)
+             {  
+                Puntos[i] = Puntos[i + 1];
+                r = new Retorno(Resultado.OK);
+                estado = false;
+             }
+             if(!estado)
+             {
+                 Puntos[i] = Puntos[i + 1];
+             }
+            }
+        }
+        return r;
 	}
 
 	@Override
@@ -147,8 +165,7 @@ public class Sistema implements ISistema {
 
 	@Override
 	public Retorno listadoEmpresas() {
-		// TODO Auto-generated method stub
-		return new Retorno(Resultado.NO_IMPLEMENTADA);
+		return arbolE.listadoEmpresas();
 	}
 
 	

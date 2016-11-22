@@ -1,13 +1,17 @@
 
 package obligatoriodatacenter;
 
+import java.util.ArrayList;
 import obligatoriodatacenter.Retorno.Resultado;
+import obligatoriodatacenter.Retorno;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ABBEmpresa {
     NodoEmpresa raiz;
     Pattern pattern = Pattern.compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
+    ArrayList<String> Empresas;
+    
     
 
     public Retorno insertar(Empresa e){
@@ -61,6 +65,23 @@ public class ABBEmpresa {
     }
     public boolean esVacio(){
         return this.raiz == null;
+    }
+    
+    public Retorno listadoEmpresas()
+    {
+        String empresas = "";
+        if(!this.esVacio()){
+            this.raiz.der.listadoEmpresas();
+            Empresas.add(this.raiz.empresa.getNombre() + ";" + this.raiz.empresa.getEmail_Contacto()+ "|");
+            this.raiz.izq.listadoEmpresas();
+        }
+        
+        for(String e : Empresas)
+        {
+           empresas = empresas + e; 
+        }
+        
+        return new Retorno(empresas);
     }
   
 }
