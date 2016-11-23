@@ -66,13 +66,18 @@ public class ABBEmpresa {
         return this.raiz == null;
     }
     
-  /*  public Retorno listadoEmpresas()
+  public StringBuilder listadoEmpresas(StringBuilder string)
     {
-        String empresas = "";
-        if(!this.esVacio()){
-            this.raiz.der.listadoEmpresas();
-            this.raiz.izq.listadoEmpresas();
+        if(!esVacio()){
+            raiz.izq.listadoEmpresas(string);
+            
+            string.append(raiz.empresa.getNombre() + " ; " + raiz.empresa.getEmail_Contacto() +" | ");  
+            
+            raiz.der.listadoEmpresas(string);
         }
+        
+        return string;
+
     }
-  */
+  
 }

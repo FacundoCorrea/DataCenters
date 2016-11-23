@@ -1,6 +1,7 @@
 package obligatoriodatacenter;
 
 import obligatoriodatacenter.Retorno.Resultado;
+import obligatoriodatacenter.Retorno;
 
 
 public class Sistema implements ISistema {
@@ -165,8 +166,8 @@ public class Sistema implements ISistema {
 
 	@Override
 	public Retorno listadoEmpresas() {
-            return new Retorno(Resultado.NO_IMPLEMENTADA);
-		//return arbolE.listadoEmpresas();
+            StringBuilder string = new StringBuilder();
+            return new Retorno(arbolE.listadoEmpresas(string).toString());
 	}
 
 	
