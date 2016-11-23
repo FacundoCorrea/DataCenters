@@ -165,7 +165,8 @@ public class Sistema implements ISistema {
 
 	@Override
 	public Retorno listadoEmpresas() {
-		return arbolE.listadoEmpresas();
+            return new Retorno(Resultado.NO_IMPLEMENTADA);
+		//return arbolE.listadoEmpresas();
 	}
 
 	

@@ -66,7 +66,7 @@ public class ABBEmpresa {
         return this.raiz == null;
     }
     
-    public Retorno listadoEmpresas()
+  /*  public Retorno listadoEmpresas()
     {
         String empresas = "";
         if(!this.esVacio()){
@@ -74,5 +74,5 @@ public class ABBEmpresa {
             this.raiz.izq.listadoEmpresas();
         }
     }
-  
+  */
 }
