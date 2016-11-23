@@ -10,7 +10,6 @@ import java.util.regex.Pattern;
 public class ABBEmpresa {
     NodoEmpresa raiz;
     Pattern pattern = Pattern.compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
-    ArrayList<String> Empresas;
     
     
 
@@ -72,16 +71,8 @@ public class ABBEmpresa {
         String empresas = "";
         if(!this.esVacio()){
             this.raiz.der.listadoEmpresas();
-            Empresas.add(this.raiz.empresa.getNombre() + ";" + this.raiz.empresa.getEmail_Contacto()+ "|");
             this.raiz.izq.listadoEmpresas();
         }
-        
-        for(String e : Empresas)
-        {
-           empresas = empresas + e; 
-        }
-        
-        return new Retorno(empresas);
     }
   
 }
