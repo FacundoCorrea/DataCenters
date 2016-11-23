@@ -32,5 +32,9 @@ public interface ISistema {
 	
 	Retorno listadoEmpresas();
 	
-	
+	 Punto[] getCantPuntos();
+         
+         Ciudad darCiudad(double x, double y);
+         
+         DataCenter darDataCenter(double x, double y);
 }

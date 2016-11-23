@@ -50,4 +50,6 @@ public class DataCenter extends Punto{
         this.setCostoCPUporHora(pCostoCPUporHora);
         
     }
+    
+    public DataCenter(){}
 }

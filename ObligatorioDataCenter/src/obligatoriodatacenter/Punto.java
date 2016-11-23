@@ -26,5 +26,9 @@ private double coordY;
         this.setCoordX(pCoordX);
         this.setCoordY(pCoordY);
     }
+    public Punto ()
+    {
+        
+    }
 }
 

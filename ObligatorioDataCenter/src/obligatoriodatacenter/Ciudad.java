@@ -18,4 +18,7 @@ public class Ciudad  extends Punto{
         this.setNombre(pNombre);
     }
     
+    public Ciudad()
+    {}
+    
 }

@@ -2,13 +2,62 @@ package obligatoriodatacenter;
 
 import obligatoriodatacenter.Retorno.Resultado;
 import obligatoriodatacenter.Retorno;
+import obligatoriodatacenter.GrafoTramos;
+
 
 
 public class Sistema implements ISistema {
 
         private Punto[] Puntos;
         private ABBEmpresa arbolE = new ABBEmpresa();
+        static GrafoTramos dijkstra = new GrafoTramos();
+
+        @Override
+        public Punto[] getCantPuntos() {
+        return Puntos;
+        }
         
+        @Override
+        public Ciudad darCiudad(double x, double y) {
+        int i;
+        Ciudad p = new Ciudad();
+        for(i=0; i <= (Puntos.length -1) ;i++)
+        {
+            if(Puntos[i] != null)
+            {
+             if(Puntos[i] instanceof Ciudad)
+             {
+                if(Puntos[i].getCoordX() == x && Puntos[i].getCoordY()== y)
+                {  
+                p = (Ciudad) Puntos[i];
+                }
+             }
+            }
+        
+        }
+        return p;
+        }
+        
+        @Override
+        public DataCenter darDataCenter(double x, double y) {
+        int i;
+        DataCenter d = new DataCenter();
+        for(i=0; i <= (Puntos.length -1) ;i++)
+        {
+            if(Puntos[i] != null)
+            {
+             if(Puntos[i] instanceof DataCenter)
+             {
+                if(Puntos[i].getCoordX() == x && Puntos[i].getCoordY()== y)
+                {  
+                d = (DataCenter) Puntos[i];
+                }
+             }
+            }
+        
+        }
+        return d;
+        }
         
 	@Override
 	public Retorno inicializarSistema(int cantPuntos) {
@@ -110,8 +159,19 @@ public class Sistema implements ISistema {
 	@Override
 	public Retorno registrarTramo(Double coordXi, Double coordYi,
 			Double coordXf, Double coordYf, int peso) {
-		// TODO Auto-generated method stub
-		return new Retorno(Resultado.NO_IMPLEMENTADA);
+        /*Retorno r;
+        if (peso <= 0) {
+                r = new Retorno(Resultado.ERROR_1, "El peso es menor o igual a 0", 1);
+            } else{
+            if (!dijkstra.existsEdge(indexOrigen, indexDestino, peso, false)) {
+                dijkstra.addEdge(indexOrigen, indexDestino, peso, false);
+                r = new Retorno(Resultado.OK);
+            }else{
+                r = new Retorno(Resultado.ERROR_3);
+            }
+        }*/
+            
+                return new Retorno(Resultado.NO_IMPLEMENTADA);
 	}
 
 	@Override

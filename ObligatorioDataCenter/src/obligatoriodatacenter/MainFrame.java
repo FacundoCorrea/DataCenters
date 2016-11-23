@@ -18,6 +18,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -295,19 +296,6 @@ public class MainFrame extends javax.swing.JFrame {
          this.JText_Ruta_Distancia.setText(String.valueOf(distancia));
 
     }
-     private void crearRuta() throws MalformedURLException, UnsupportedEncodingException{
-         if(!JText_Ruta_DirecOrigen.getText().isEmpty() && !JText_Ruta_DirecDestin.getText().isEmpty()){
-             ArrayList<String> hitos=new ArrayList<>();
-             if(jCheckBox_Ruta_Hito.isSelected() && !JText_Ruta_Hito.getText().isEmpty()){
-                 hitos.add(JText_Ruta_Hito.getText());
-             }
-             String[][] arrayRoute=ObjRoute.getRoute(JText_Ruta_DirecOrigen.getText(), JText_Ruta_DirecDestin.getText(),
-                     hitos, Boolean.TRUE,this.seleccionarModoRuta(),this.seleccionarRestricciones());  
-             rellenarTablaRuta(arrayRoute);
-             rellenarDatosrRuta();
-            
-         }
-    }
     private void guardarCambios(){
          MapsJava.setConnectTimeout(Integer.valueOf(JText_Conexion.getText()));
 //         MapsJava.setLanguage(JText_idioma.getText());
@@ -377,6 +365,32 @@ public class MainFrame extends javax.swing.JFrame {
     }
     private void borrarTable(JTable jtable){
         jtable.setModel(new DefaultTableModel());
+    }
+    private void cargarPuntosComboBox() {
+        Origenes.removeAllItems();
+        Destinos.removeAllItems();
+        final DefaultComboBoxModel modeloOrigen = new DefaultComboBoxModel();
+        final DefaultComboBoxModel modeloDestino = new DefaultComboBoxModel();
+        Punto[] puntos = Sistema.getCantPuntos() ;
+
+        for (int i = 0; i < puntos.length; i++) {
+            String s = new String();
+            if (puntos[i] instanceof Ciudad) {
+                s = new StringBuilder("Ciudad :" + Sistema.darCiudad(puntos[i].getCoordX(), puntos[i].getCoordY()).getNombre()).toString();
+                modeloOrigen.addElement(new ComboItem(s,i));
+                modeloDestino.addElement(new ComboItem(s,i));
+            }
+            if (puntos[i] instanceof DataCenter) {
+                s = new StringBuilder("DC :" + Sistema.darDataCenter(puntos[i].getCoordX(), puntos[i].getCoordY()).getNombre()).toString();
+                modeloOrigen.addElement(new ComboItem(s, i));
+                modeloDestino.addElement(new ComboItem(s,i));
+            } else {
+
+            }
+            
+        }
+        Origenes.setModel(modeloOrigen);
+        Destinos.setModel(modeloDestino);
     }
     private void places() throws UnsupportedEncodingException, MalformedURLException, IOException{
         if(!JText_Pl_Direccion.getText().isEmpty()){
@@ -532,8 +546,6 @@ public class MainFrame extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable_Ruta_Tramos = new javax.swing.JTable();
         jLabel19 = new javax.swing.JLabel();
-        JText_Ruta_DirecOrigen = new javax.swing.JTextField();
-        JText_Ruta_DirecDestin = new javax.swing.JTextField();
         jLabel20 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
         JCombo_Ruta_Restricc = new javax.swing.JComboBox();
@@ -546,6 +558,8 @@ public class MainFrame extends javax.swing.JFrame {
         JText_Ruta_Tiempo = new javax.swing.JTextField();
         JText_Ruta_Distancia = new javax.swing.JTextField();
         JLabel_Ruta_Status = new javax.swing.JLabel();
+        Destinos = new javax.swing.JComboBox();
+        Origenes = new javax.swing.JComboBox();
         jPanel9 = new javax.swing.JPanel();
         jScrollPane6 = new javax.swing.JScrollPane();
         jTable_Pl_places = new javax.swing.JTable();
@@ -1500,6 +1514,15 @@ public class MainFrame extends javax.swing.JFrame {
 
         JLabel_Ruta_Status.setFont(new java.awt.Font("Tahoma", 0, 8)); // NOI18N
 
+        Destinos.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        Destinos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DestinosActionPerformed(evt);
+            }
+        });
+
+        Origenes.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
@@ -1509,7 +1532,6 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton_Peticiones1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 495, Short.MAX_VALUE)
-                    .addComponent(JText_Ruta_DirecDestin)
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addComponent(jCheckBox_Ruta_Hito)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1535,21 +1557,26 @@ public class MainFrame extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(JText_Ruta_Distancia, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(JLabel_Ruta_Status)
-                            .addComponent(JText_Ruta_DirecOrigen, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(Destinos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel6Layout.createSequentialGroup()
+                    .addGap(20, 20, 20)
+                    .addComponent(Origenes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(439, Short.MAX_VALUE)))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(JText_Ruta_DirecOrigen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(32, 32, 32)
                 .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(JText_Ruta_DirecDestin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(Destinos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1573,12 +1600,15 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGap(51, 51, 51)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel6Layout.createSequentialGroup()
+                    .addGap(36, 36, 36)
+                    .addComponent(Origenes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(390, Short.MAX_VALUE)))
         );
 
         jButton_Peticiones1.getAccessibleContext().setAccessibleName("calculaRuta");
         jLabel19.getAccessibleContext().setAccessibleName("direccionOrigen");
-        JText_Ruta_DirecOrigen.getAccessibleContext().setAccessibleName("direccionOrigen");
-        JText_Ruta_DirecDestin.getAccessibleContext().setAccessibleName("direccionDestino");
         jLabel20.getAccessibleContext().setAccessibleName("direccionDestino");
         jLabel21.getAccessibleContext().setAccessibleName("restriccionCarreteras");
         JCombo_Ruta_Restricc.getAccessibleContext().setAccessibleName("restriccionCarreteras");
@@ -1968,17 +1998,6 @@ public class MainFrame extends javax.swing.JFrame {
         seleccionarItemList();
     }//GEN-LAST:event_jList_CI_DirEnconValueChanged
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-      guardarCambios();
-    }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        try {
-            pegarTexto();
-        } catch (Exception ex) {
-        }
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     private void jTabbedPane1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
         if(jTabbedPane1.getSelectedIndex()==0){
             actualizarPropiedades();
@@ -1994,49 +2013,14 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton_Peticiones1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_Peticiones1ActionPerformed
-        try {
-            crearRuta();
-        } catch (Exception ex) {
-        }
+
     }//GEN-LAST:event_jButton_Peticiones1ActionPerformed
        
-    private void JButton_ME_Buscar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JButton_ME_Buscar1ActionPerformed
-        if(!MapsJava.getKey().isEmpty()){
-        try {
-            places();
-        } catch (Exception ex) {
-            System.err.println(ex.toString());
-        }
-        }else{
-            JOptionPane.showMessageDialog(null,"Esta función requiere clave de desarrollador", 
-                    "Error",JOptionPane.ERROR_MESSAGE);
-        }
-    }//GEN-LAST:event_JButton_ME_Buscar1ActionPerformed
-
-    private void JSlider_Pl_RadioStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_JSlider_Pl_RadioStateChanged
-        this.JText_Pl_Radio.setText(String.valueOf(JSlider_Pl_Radio.getValue()));
-    }//GEN-LAST:event_JSlider_Pl_RadioStateChanged
-
     private void seleccionarReferencia(){
         if(jTable_Pl_places.getRowCount()>0){
           this.JText_Pl_Referencia.setText((String)jTable_Pl_places.getValueAt(jTable_Pl_places.getSelectedRow(),5));
         }
-    }
-    private void jTable_Pl_placesMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable_Pl_placesMousePressed
-         seleccionarReferencia();
-    }//GEN-LAST:event_jTable_Pl_placesMousePressed
-
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        try {
-             abrirFramePlaces(JText_Pl_Referencia.getText());
-        } catch (Exception e) {
-        }
-    }//GEN-LAST:event_jButton6ActionPerformed
-  
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        comprobarClaveApi();
-    }//GEN-LAST:event_jButton2ActionPerformed
-
+    }  
     private void JSlider_ME_ZoomStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_JSlider_ME_ZoomStateChanged
         this.JText_ME_Zoom.setText(String.valueOf(JSlider_ME_Zoom.getValue()));
     }//GEN-LAST:event_JSlider_ME_ZoomStateChanged
@@ -2066,6 +2050,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         EstadoC.setText(Sistema.registrarCiudad(JText_CD_DireEnc.getText(),Double.parseDouble( JText_CD_Lati.getText()),Double.parseDouble( JText_CD_Long.getText())).resultado.toString());
+        cargarPuntosComboBox();
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void JText_CD_DireEncActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JText_CD_DireEncActionPerformed
@@ -2082,6 +2067,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void ButtonDCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ButtonDCActionPerformed
         EstadoDC.setText(Sistema.registrarDC(NombreDC.getText(),Double.parseDouble(LatDC.getText()), Double.parseDouble(LonDC.getText()),EmpresaDC.getText(),Integer.parseInt(CapacidadDC.getText()),Integer.parseInt(CostoDC.getText())).resultado.toString());
+        cargarPuntosComboBox();
     }//GEN-LAST:event_ButtonDCActionPerformed
 
     private void ColorEmpresaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ColorEmpresaActionPerformed
@@ -2115,6 +2101,53 @@ public class MainFrame extends javax.swing.JFrame {
     private void ListadoEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ListadoEActionPerformed
       EstadoEmpresa.setText(Sistema.listadoEmpresas().valorString);
     }//GEN-LAST:event_ListadoEActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        try {
+            abrirFramePlaces(JText_Pl_Referencia.getText());
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void JSlider_Pl_RadioStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_JSlider_Pl_RadioStateChanged
+        this.JText_Pl_Radio.setText(String.valueOf(JSlider_Pl_Radio.getValue()));
+    }//GEN-LAST:event_JSlider_Pl_RadioStateChanged
+
+    private void JButton_ME_Buscar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JButton_ME_Buscar1ActionPerformed
+        if(!MapsJava.getKey().isEmpty()){
+            try {
+                places();
+            } catch (Exception ex) {
+                System.err.println(ex.toString());
+            }
+        }else{
+            JOptionPane.showMessageDialog(null,"Esta función requiere clave de desarrollador",
+                "Error",JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_JButton_ME_Buscar1ActionPerformed
+
+    private void jTable_Pl_placesMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable_Pl_placesMousePressed
+        seleccionarReferencia();
+    }//GEN-LAST:event_jTable_Pl_placesMousePressed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        guardarCambios();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        comprobarClaveApi();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try {
+            pegarTexto();
+        } catch (Exception ex) {
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void DestinosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DestinosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_DestinosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -2157,6 +2190,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JTextField CapacidadDC;
     private javax.swing.JTextField ColorEmpresa;
     private javax.swing.JTextField CostoDC;
+    private javax.swing.JComboBox Destinos;
     private javax.swing.JTextField DireccionEmpresa;
     private javax.swing.JTextField EmailEmpresa;
     private javax.swing.JTextField EmpresaDC;
@@ -2209,8 +2243,6 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JTextField JText_Pl_Radio;
     private javax.swing.JTextField JText_Pl_Referencia;
     private javax.swing.JTextField JText_Region;
-    private javax.swing.JTextField JText_Ruta_DirecDestin;
-    private javax.swing.JTextField JText_Ruta_DirecOrigen;
     private javax.swing.JTextField JText_Ruta_Distancia;
     private javax.swing.JTextField JText_Ruta_Hito;
     private javax.swing.JTextField JText_Ruta_Tiempo;
@@ -2221,6 +2253,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JTextField LonE;
     private javax.swing.JTextField NombreDC;
     private javax.swing.JTextField NombreEmpresa;
+    private javax.swing.JComboBox Origenes;
     private javax.swing.JTextField PaisEmpresa;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
