@@ -1833,10 +1833,6 @@ public class MainFrame extends javax.swing.JFrame {
         cargarPuntosComboBox();
     }//GEN-LAST:event_ButtonDCActionPerformed
 
-    private void ColorEmpresaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ColorEmpresaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ColorEmpresaActionPerformed
-
     private void EmailEmpresaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EmailEmpresaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_EmailEmpresaActionPerformed
@@ -1911,6 +1907,10 @@ public class MainFrame extends javax.swing.JFrame {
     private void DestinosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DestinosActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_DestinosActionPerformed
+
+    private void ColorEmpresaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ColorEmpresaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ColorEmpresaActionPerformed
 
     /**
      * @param args the command line arguments
