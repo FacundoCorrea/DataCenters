@@ -2,7 +2,6 @@ package obligatoriodatacenter;
 
 import obligatoriodatacenter.Retorno.Resultado;
 import obligatoriodatacenter.Retorno;
-import obligatoriodatacenter.GrafoTramos;
 
 
 
@@ -10,7 +9,6 @@ public class Sistema implements ISistema {
 
         private Punto[] Puntos;
         private ABBEmpresa arbolE = new ABBEmpresa();
-        static GrafoTramos dijkstra = new GrafoTramos();
 
         @Override
         public Punto[] getCantPuntos() {
@@ -75,6 +73,7 @@ public class Sistema implements ISistema {
 	@Override
 	public Retorno destruirSistema() {
 		Puntos = null;
+                arbolE.raiz = null;
 		return new Retorno(Resultado.OK);
 	}
 
@@ -159,17 +158,6 @@ public class Sistema implements ISistema {
 	@Override
 	public Retorno registrarTramo(Double coordXi, Double coordYi,
 			Double coordXf, Double coordYf, int peso) {
-        /*Retorno r;
-        if (peso <= 0) {
-                r = new Retorno(Resultado.ERROR_1, "El peso es menor o igual a 0", 1);
-            } else{
-            if (!dijkstra.existsEdge(indexOrigen, indexDestino, peso, false)) {
-                dijkstra.addEdge(indexOrigen, indexDestino, peso, false);
-                r = new Retorno(Resultado.OK);
-            }else{
-                r = new Retorno(Resultado.ERROR_3);
-            }
-        }*/
             
                 return new Retorno(Resultado.NO_IMPLEMENTADA);
 	}
