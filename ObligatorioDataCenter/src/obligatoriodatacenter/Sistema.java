@@ -185,7 +185,7 @@ public class Sistema implements ISistema {
                     NodoPunto Anterior = Tramos[a];
                     if((Tramos[a].getPunto().getCoordX()==auxT.getOrigen().getCoordX())&&(Tramos[a].getPunto().getCoordY()==auxT.getOrigen().getCoordY())){
                         //el origen del tramo se encontro en la lista
-                        NodoPunto aux = Tramos[a].sig;
+                        NodoPunto aux = Tramos[a];
                         while(aux.sig!=null){
                             //chequeo que no exista el tramo anteriormente
                           if((aux.sig.punto.getCoordX()==auxT.getDestino().getCoordX())&&(aux.sig.punto.getCoordY()==auxT.getDestino().getCoordY())){                             
@@ -200,10 +200,39 @@ public class Sistema implements ISistema {
                         nuevo.peso = auxT.getPeso();
                         Anterior.sig = nuevo;
                     }
-                }
+                    //chequeo que el punto destino este y agrego un nodo punto con el origen al destino para que me represente la ida y vuelta al buscar
+                    if(((Tramos[a].getPunto().getCoordX())==auxT.getDestino().getCoordX())&&(Tramos[a].getPunto().getCoordY()==auxT.getDestino().getCoordY())){
+                    NodoPunto aux2 = Tramos[a];
+                        while(aux2.sig!=null){
+                       //chequeo que no exista el tramo anteriormente
+                             if((aux2.sig.punto.getCoordX()==auxT.getOrigen().getCoordX())&&(aux2.sig.punto.getCoordY()==auxT.getOrigen().getCoordY())){                             
+                                 return new Retorno(Resultado.ERROR_3); 
+                             }
+                             Anterior = aux2;
+                             aux2 = aux2.sig;
+                        }
+                        //no existe lo agrego 
+                        NodoPunto nuevo = new NodoPunto ();
+                        nuevo.punto = auxT.getOrigen();
+                        nuevo.peso = auxT.getPeso();
+                        Anterior.sig = nuevo;
+                    }
             }
-            
-           return new Retorno(Resultado.OK);
+            else{
+                    NodoPunto nuevo1 = new NodoPunto ();
+                    nuevo1.peso = auxT.getPeso();
+                    nuevo1.punto = auxT.getOrigen();
+                    NodoPunto nuevo2 = new NodoPunto ();
+                    nuevo2.peso = auxT.getPeso();
+                    nuevo2.punto = auxT.getDestino();
+                    Tramos[a]=nuevo1;
+                    Tramos[a].sig=nuevo2;
+                    Tramos[a+1]=nuevo2;
+                    Tramos[a+1].sig=nuevo1;
+            }
+            }
+                return new Retorno(Resultado.OK);
+             
 	}
 
 	@Override
