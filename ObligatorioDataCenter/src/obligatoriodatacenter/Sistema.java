@@ -9,7 +9,7 @@ public class Sistema implements ISistema {
 
         private Punto[] Puntos;
         private ABBEmpresa arbolE = new ABBEmpresa();
-
+        private NodoPunto[] Tramos;
         @Override
         public Punto[] getCantPuntos() {
         return Puntos;
@@ -158,8 +158,48 @@ public class Sistema implements ISistema {
 	@Override
 	public Retorno registrarTramo(Double coordXi, Double coordYi,
 			Double coordXf, Double coordYf, int peso) {
+            Punto auxOrigen = new Punto (coordXi,coordYi);
+            Punto auxDestino = new Punto (coordXf,coordYf);
+            Tramo auxT = new Tramo(auxOrigen,auxDestino,peso);
+            if (peso<=0){ return new Retorno(Resultado.ERROR_1);}
+            int i,a,b;
+            boolean estadoInicio = false;
+            boolean estadoFin = false;
             
-                return new Retorno(Resultado.NO_IMPLEMENTADA);
+            for(i=0; i <= ((Puntos.length)-1);i++){
+                if(Puntos[i]!=null){
+                    if(((Puntos[i].getCoordX())==coordXi) &&((Puntos[i].getCoordY())==coordYi)){
+                          estadoInicio = true;
+                    }
+                    if(((Puntos[i].getCoordX())==coordXf) &&((Puntos[i].getCoordY())==coordYf)){
+                          estadoFin = true;
+                    }                
+                }
+            }
+            if(estadoInicio || estadoFin == false){     
+            return new Retorno(Resultado.ERROR_2);
+            }
+             for(a=0;a<=((Tramos.length)-1);a++){
+                if(Tramos[a]!=null){
+                    NodoPunto Anterior = Tramos[a].sig;
+                    if((Tramos[a].getPunto().getCoordX()==auxT.getOrigen().getCoordX())&&(Tramos[a].getPunto().getCoordY()==auxT.getOrigen().getCoordY())){
+                        NodoPunto aux = Tramos[a].sig;
+                        while(aux.sig!=null){
+                          if((aux.sig.punto.getCoordX()==auxT.getDestino().getCoordX())&&(aux.sig.punto.getCoordY()==auxT.getDestino().getCoordY())){
+                             
+                              return new Retorno(Resultado.ERROR_3);
+                             
+                          }
+                          Anterior = aux;
+                          aux = aux.sig;
+                          //Anterior = Tramos[a];
+                        }
+                        Anterior.sig.punto=auxT.getDestino();
+                        Anterior.sig.peso=auxT.getPeso();
+                    }
+                }
+            }
+           return new Retorno(Resultado.OK);
 	}
 
 	@Override
