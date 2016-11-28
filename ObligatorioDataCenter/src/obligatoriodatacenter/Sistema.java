@@ -239,6 +239,22 @@ public class Sistema implements ISistema {
 	public Retorno eliminarTramo(Double coordXi, Double coordYi,
 			Double coordXf, Double coordYf) {
 		// TODO Auto-generated method stub
+            Punto auxOrigen = new Punto (coordXi,coordYi);
+            Punto auxDestino = new Punto (coordXf,coordYf);
+            int i,o;
+            
+            for (i=0;i<=(Tramos.length)-1;i++){
+                if(Tramos[i].punto.getCoordX()==auxOrigen.getCoordX()&&Tramos[i].punto.getCoordY()==auxOrigen.getCoordY()){
+                   while(Tramos[i].sig!=null){
+                    if(Tramos[i].punto.getCoordX()==auxDestino.getCoordX()&&Tramos[i].punto.getCoordY()==auxDestino.getCoordY()){
+                     Anterior.sig=
+                    }
+                   }
+                }
+            
+                NodoPunto Anterior = Tramos[i];
+
+            }
 		return new Retorno(Resultado.NO_IMPLEMENTADA);
 	}
 
